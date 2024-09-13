@@ -38,8 +38,8 @@ public class PrenotazioneService {
     }
 
     public Prenotazione save(PrenotazioneDTO prenotazioneDTO) {
-        Viaggio viaggio = viaggioService.findByID(prenotazioneDTO.viaggioID());
-        Dipendente dipendente = dipendenteService.findByID(prenotazioneDTO.dipendenteID());
+        Viaggio viaggio = viaggioService.findByID(UUID.fromString(prenotazioneDTO.viaggioID()));
+        Dipendente dipendente = dipendenteService.findByID(UUID.fromString(prenotazioneDTO.dipendenteID()));
         if (!this.controlloDataPrenotazioni(dipendente.getId(), viaggio.getData())) {
             throw new BadRequestEx("Non puoi prenotare due viaggi lo stesso giorno o lo stesso viaggio due volte!");
         }
@@ -53,8 +53,8 @@ public class PrenotazioneService {
 
     public Prenotazione update(UUID prenotazioneID, PrenotazioneDTO prenotazioneDTO) {
         Prenotazione prenotazione = this.findByID(prenotazioneID);
-        Viaggio viaggio = viaggioService.findByID(prenotazioneDTO.viaggioID());
-        Dipendente dipendente = dipendenteService.findByID(prenotazioneDTO.dipendenteID());
+        Viaggio viaggio = viaggioService.findByID(UUID.fromString(prenotazioneDTO.viaggioID()));
+        Dipendente dipendente = dipendenteService.findByID(UUID.fromString(prenotazioneDTO.dipendenteID()));
         prenotazione.setDipendente(dipendente);
         prenotazione.setViaggio(viaggio);
         prenotazione.setNote(prenotazioneDTO.note());
