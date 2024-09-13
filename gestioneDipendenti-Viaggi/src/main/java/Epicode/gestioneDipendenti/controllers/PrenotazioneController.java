@@ -59,6 +59,7 @@ public class PrenotazioneController {
     }
 
     @DeleteMapping("{prenotazioneID}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findAndDelete(@PathVariable UUID prenotazioneID) {
         this.prenotazioneService.findAndDelete(prenotazioneID);
     }

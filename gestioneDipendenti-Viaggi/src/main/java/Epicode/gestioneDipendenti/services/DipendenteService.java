@@ -68,11 +68,15 @@ public class DipendenteService {
         this.dipendenteRepository.delete(dipendente);
     }
 
-    public Dipendente avatarUpload(UUID dipendenteID, MultipartFile file) throws IOException {
-        String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-        Dipendente dipendente = this.findByID(dipendenteID);
-        dipendente.setAvatar(url);
-        return this.dipendenteRepository.save(dipendente);
+    public Dipendente avatarUpload(UUID dipendenteID, MultipartFile file) {
+        try {
+            String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+            Dipendente dipendente = this.findByID(dipendenteID);
+            dipendente.setAvatar(url);
+            return this.dipendenteRepository.save(dipendente);
+        } catch (IOException e) {
+            throw new BadRequestEx("Errore nel caricamento del file. Verifica il formato e le dimensioni!");
+        }
     }
 
 }

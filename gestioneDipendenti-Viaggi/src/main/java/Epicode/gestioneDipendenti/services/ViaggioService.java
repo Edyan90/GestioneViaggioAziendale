@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -33,6 +34,9 @@ public class ViaggioService {
     }
 
     public Viaggio save(ViaggioDTO viaggioDTO) {
+        if (viaggioDTO.data().isBefore(LocalDate.now())) {
+            throw new BadRequestEx("La data del viaggio non può essere nel passato.");
+        }
         Viaggio viaggio = new Viaggio(
                 viaggioDTO.destinazione(),
                 viaggioDTO.data());

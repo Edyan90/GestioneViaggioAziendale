@@ -44,7 +44,11 @@ public class PrenotazioneService {
             throw new BadRequestEx("Non puoi prenotare due viaggi lo stesso giorno o lo stesso viaggio due volte!");
         }
         Prenotazione prenotazione = new Prenotazione(viaggio, dipendente, prenotazioneDTO.note());
-        return this.prenotazioneRepository.save(prenotazione);
+        try {
+            return this.prenotazioneRepository.save(prenotazione);
+        } catch (Exception e) {
+            throw new BadRequestEx("Errore nel salvataggio della prenotazione. Verifica i dati e riprova.");
+        }
     }
 
     public Prenotazione update(UUID prenotazioneID, PrenotazioneDTO prenotazioneDTO) {
