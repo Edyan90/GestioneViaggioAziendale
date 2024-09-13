@@ -60,6 +60,7 @@ public class DipendenteController {
     }
 
     @DeleteMapping("/{dipendenteID}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findAndDelete(@PathVariable UUID dipendenteID) {
         this.dipendenteService.findAndDelete(dipendenteID);
     }

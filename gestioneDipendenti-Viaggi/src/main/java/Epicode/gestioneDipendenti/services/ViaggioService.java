@@ -6,6 +6,7 @@ import Epicode.gestioneDipendenti.enums.StatoType;
 import Epicode.gestioneDipendenti.exceptions.BadRequestEx;
 import Epicode.gestioneDipendenti.exceptions.NotFoundEx;
 import Epicode.gestioneDipendenti.recordsDTO.ViaggioDTO;
+import Epicode.gestioneDipendenti.recordsDTO.ViaggioStatusDTO;
 import Epicode.gestioneDipendenti.repositories.ViaggioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,5 +63,24 @@ public class ViaggioService {
     public void findByIDAndDelete(UUID viaggioID) {
         Viaggio viaggio = this.findByID(viaggioID);
         this.viaggioRepository.delete(viaggio);
+    }
+
+    public Viaggio upDateStatus(UUID viaggioID, ViaggioStatusDTO viaggioStatusDTO) {
+        Viaggio viaggio = this.findByID(viaggioID);
+        switch (viaggioStatusDTO.statoType().toLowerCase()) {
+            case "in programma":
+                viaggio.setStatoType(StatoType.IN_PROGRAMMA);
+                break;
+            case "completato":
+                viaggio.setStatoType(StatoType.COMPLETATO);
+                break;
+            case "cancellato":
+                viaggio.setStatoType(StatoType.CANCELLATO);
+                break;
+            default:
+                throw new BadRequestEx("Stato non valido: " + viaggioStatusDTO.statoType() +
+                        ". I valori validi sono: in programma, completato, cancellato.");
+        }
+        return this.viaggioRepository.save(viaggio);
     }
 }
