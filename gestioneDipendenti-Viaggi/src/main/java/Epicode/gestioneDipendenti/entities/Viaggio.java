@@ -1,10 +1,7 @@
 package Epicode.gestioneDipendenti.entities;
 
 import Epicode.gestioneDipendenti.enums.StatoType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -24,6 +21,7 @@ public class Viaggio {
     private UUID id;
     private String destinazione;
     private LocalDate data;
+    @Enumerated(EnumType.STRING)
     private StatoType statoType;
 
     public Viaggio(String destinazione, LocalDate data) {

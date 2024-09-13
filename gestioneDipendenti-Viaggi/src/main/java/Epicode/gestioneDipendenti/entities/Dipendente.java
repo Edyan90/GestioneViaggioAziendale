@@ -12,7 +12,6 @@ import java.util.UUID;
 @Table(name = "dipendenti")
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class Dipendente {
@@ -24,4 +23,12 @@ public class Dipendente {
     private String nome;
     private String cognome;
     private String email;
+    private String avatar;
+
+    public Dipendente(String username, String nome, String cognome, String email) {
+        this.username = username;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+    }
 }
