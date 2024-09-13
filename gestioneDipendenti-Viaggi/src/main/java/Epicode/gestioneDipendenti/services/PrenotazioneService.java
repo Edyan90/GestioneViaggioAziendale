@@ -41,7 +41,7 @@ public class PrenotazioneService {
         Viaggio viaggio = viaggioService.findByID(prenotazioneDTO.viaggioID());
         Dipendente dipendente = dipendenteService.findByID(prenotazioneDTO.dipendenteID());
         if (!this.controlloDataPrenotazioni(dipendente.getId(), viaggio.getData())) {
-            throw new BadRequestEx("Non puoi prenotare due viaggi lo stesso giorno!");
+            throw new BadRequestEx("Non puoi prenotare due viaggi lo stesso giorno o lo stesso viaggio due volte!");
         }
         Prenotazione prenotazione = new Prenotazione(viaggio, dipendente, prenotazioneDTO.note());
         return this.prenotazioneRepository.save(prenotazione);
@@ -71,7 +71,7 @@ public class PrenotazioneService {
                 return false;
             }
         }
-        if (this.prenotazioneRepository.existsByDipendenteAndData(dipendente, requestDate)) {
+        if (this.prenotazioneRepository.existsByDipendenteAndDataDiRichiesta(dipendente, requestDate)) {
             return false;
         }
         return true;

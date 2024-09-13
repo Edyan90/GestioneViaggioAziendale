@@ -13,5 +13,5 @@ public interface PrenotazioneRepository extends JpaRepository<Prenotazione, UUID
     @Query("SELECT pr.viaggio.data FROM Prenotazione pr WHERE pr.dipendente.id=:dipendenteID ")
     List<LocalDate> findDatesByDipendenteID(UUID dipendenteID);
 
-    boolean existsByDipendenteAndData(Dipendente dipendente, LocalDate data);
+    boolean existsByDipendenteAndDataDiRichiesta(Dipendente dipendente, LocalDate data);
 }

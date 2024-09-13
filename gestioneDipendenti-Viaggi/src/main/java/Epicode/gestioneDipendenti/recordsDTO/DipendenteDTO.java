@@ -14,7 +14,7 @@ public record DipendenteDTO(
         @Size(min = 3, max = 20, message = "il cognome deve avere un minimo di 2 ad un massimo di 20 caratteri")
         String cognome,
         @NotEmpty(message = "l'email è obbligatorio!")
-        @Size(min = 3, max = 20, message = "l'email deve avere un minimo di 2 ad un massimo di 20 caratteri")
+        @Size(min = 3, max = 30, message = "l'email deve avere un minimo di 2 ad un massimo di 20 caratteri")
         String email
 ) {
 }

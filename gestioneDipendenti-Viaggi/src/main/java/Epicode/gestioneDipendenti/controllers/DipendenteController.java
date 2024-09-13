@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -21,20 +23,20 @@ public class DipendenteController {
     DipendenteService dipendenteService;
 
     @GetMapping
-    private Page<Dipendente> findAll(@RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size,
-                                     @RequestParam(defaultValue = "nome") String sortBy) {
+    public Page<Dipendente> findAll(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10") int size,
+                                    @RequestParam(defaultValue = "nome") String sortBy) {
         return this.dipendenteService.findAll(page, size, sortBy);
     }
 
     @GetMapping("{dipendenteID}")
-    private Dipendente findByID(@PathVariable UUID dipendenteID) {
+    public Dipendente findByID(@PathVariable UUID dipendenteID) {
         return this.dipendenteService.findByID(dipendenteID);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private Dipendente create(@RequestBody @Validated DipendenteDTO dipendenteDTO, BindingResult validationResult) {
+    public Dipendente create(@RequestBody @Validated DipendenteDTO dipendenteDTO, BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
                     .map(objectError -> objectError.getDefaultMessage())
@@ -46,7 +48,7 @@ public class DipendenteController {
     }
 
     @PutMapping("/{dipendenteID}")
-    private Dipendente findAndUpdate(@PathVariable UUID dipendenteID, @RequestBody @Validated DipendenteDTO dipendenteDTO, BindingResult validationResult) {
+    public Dipendente findAndUpdate(@PathVariable UUID dipendenteID, @RequestBody @Validated DipendenteDTO dipendenteDTO, BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
                     .map(objectError -> objectError.getDefaultMessage())
@@ -58,7 +60,12 @@ public class DipendenteController {
     }
 
     @DeleteMapping("/{dipendenteID}")
-    private void findAndDelete(@PathVariable UUID dipendenteID) {
+    public void findAndDelete(@PathVariable UUID dipendenteID) {
         this.dipendenteService.findAndDelete(dipendenteID);
+    }
+
+    @PostMapping("/{dipendenteID}/avatar")
+    public Dipendente uploadAvatar(@PathVariable UUID dipendenteID, @RequestParam("avatar") MultipartFile image) throws IOException {
+        return this.dipendenteService.avatarUpload(dipendenteID, image);
     }
 }
