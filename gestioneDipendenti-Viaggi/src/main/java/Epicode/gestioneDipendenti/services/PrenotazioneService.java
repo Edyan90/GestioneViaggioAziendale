@@ -3,6 +3,7 @@ package Epicode.gestioneDipendenti.services;
 import Epicode.gestioneDipendenti.entities.Dipendente;
 import Epicode.gestioneDipendenti.entities.Prenotazione;
 import Epicode.gestioneDipendenti.entities.Viaggio;
+import Epicode.gestioneDipendenti.exceptions.BadRequestEx;
 import Epicode.gestioneDipendenti.exceptions.NotFoundEx;
 import Epicode.gestioneDipendenti.recordsDTO.PrenotazioneDTO;
 import Epicode.gestioneDipendenti.repositories.PrenotazioneRepository;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,6 +40,9 @@ public class PrenotazioneService {
     public Prenotazione save(PrenotazioneDTO prenotazioneDTO) {
         Viaggio viaggio = viaggioService.findByID(prenotazioneDTO.viaggioID());
         Dipendente dipendente = dipendenteService.findByID(prenotazioneDTO.dipendenteID());
+        if (!this.controlloDataPrenotazioni(dipendente.getId(), viaggio.getData())) {
+            throw new BadRequestEx("Non puoi prenotare due viaggi lo stesso giorno!");
+        }
         Prenotazione prenotazione = new Prenotazione(viaggio, dipendente, prenotazioneDTO.note());
         return this.prenotazioneRepository.save(prenotazione);
     }
@@ -55,5 +61,19 @@ public class PrenotazioneService {
         Prenotazione prenotazione = this.findByID(prenotazioneID);
         this.prenotazioneRepository.delete(prenotazione);
     }
-    
+
+    public boolean controlloDataPrenotazioni(UUID dipendenteID, LocalDate requestDate) {
+        Dipendente dipendente = dipendenteService.findByID(dipendenteID);
+
+        List<LocalDate> datePrenotazioni = prenotazioneRepository.findDatesByDipendenteID(dipendenteID);
+        for (LocalDate data : datePrenotazioni) {
+            if (data.equals(requestDate)) {
+                return false;
+            }
+        }
+        if (this.prenotazioneRepository.existsByDipendenteAndData(dipendente, requestDate)) {
+            return false;
+        }
+        return true;
+    }
 }

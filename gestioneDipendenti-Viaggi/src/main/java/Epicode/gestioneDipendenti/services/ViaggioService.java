@@ -63,5 +63,4 @@ public class ViaggioService {
         Viaggio viaggio = this.findByID(viaggioID);
         this.viaggioRepository.delete(viaggio);
     }
-
 }
