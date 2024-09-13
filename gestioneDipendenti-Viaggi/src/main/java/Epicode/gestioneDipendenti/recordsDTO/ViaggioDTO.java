@@ -1,6 +1,5 @@
 package Epicode.gestioneDipendenti.recordsDTO;
 
-import Epicode.gestioneDipendenti.enums.StatoType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,6 +13,6 @@ public record ViaggioDTO(
         @NotNull(message = "manca data dell'autore")
         LocalDate data,
         @NotNull(message = "manca lo stato del viaggio in caso di un aggiornamento di esso.Altrimenti nella creazione sarà settato di default come IN_PROGRAMMA")
-        StatoType statoType
+        String statoType
 ) {
 }
